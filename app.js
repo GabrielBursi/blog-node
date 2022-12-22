@@ -24,6 +24,13 @@ const app = express()
 
     app.use(express.static(path.join(__dirname,"public")))
 
+    mongoose.set('strictQuery', false);
+    try {
+        await mongoose.connect('mongodb://localhost:27017/blognode');
+    } catch (error) {
+        console.log(error);
+    }
+
 //!Rotas
     app.get('/',(req, res) => {
         res.render('home')
