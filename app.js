@@ -25,6 +25,9 @@ const app = express()
     app.use(express.static(path.join(__dirname,"public")))
 
 //!Rotas
+    app.get('/',(req, res) => {
+        res.render('home')
+    })
 
     app.use('/admin', routerAdm)
     
