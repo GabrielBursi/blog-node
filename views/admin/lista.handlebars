@@ -1,6 +1,13 @@
 <h1>Lista</h1>
-<ul>
+<hr>
+    {{#each items}}
+        <div class="mb-4">
+            <h4>{{nome}}</h4>
+            <span>Slug: {{slug}}</span>
+            <br>
+            <span>Data: {{data}}</span>
+        </div>
+    {{else}}
 
-</ul>
-
+    {{/each}}
 <a href="/admin/lista/add"><button class="btn btn-success">Adicionar</button></a>
