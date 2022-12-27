@@ -1,4 +1,5 @@
 import express from 'express'
+import { Model } from 'mongoose'
 
 import ModelCategoria from '../models/Categoria.js'
 
@@ -74,5 +75,8 @@ router.post('/lista/edit', (req, res) => {
     })
 })
 
+router.post('/lista/delete', (req, res) => {
+    ModelCategoria.findByIdAndDelete(req.body.id).then(() => res.redirect('/admin/lista'))
+})
 
 export default router

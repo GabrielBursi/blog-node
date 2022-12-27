@@ -10,8 +10,12 @@
             <a href="/admin/lista/edit/{{_id}}">
                 <button class="btn btn-success mt-2">Editar</button>
             </a>
+            <form action="/admin/lista/delete" method="POST">
+                <input type="hidden" name="id" value="{{_id}}">
+                <button type="submit" class="btn btn-danger mt-2">Excluir</button>
+            </form>
         </div>
     {{else}}
-
+        <h4>Nenhuma categoria!</h4>
     {{/each}}
 <a href="/admin/lista/add"><button class="btn btn-success">Adicionar</button></a>
