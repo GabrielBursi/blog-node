@@ -10,7 +10,10 @@ router.get('/', (req, res) => {
 })
 
 router.get('/lista', (req, res) => {
-    res.render('posts/lista')
+    ModelPostagens.find().lean().populate('categoria').sort({data: 'desc'})
+        .then(postagens => {
+            res.render('posts/lista', {postagens})
+        })
 })
 
 router.get('/lista/add', (req, res) => {

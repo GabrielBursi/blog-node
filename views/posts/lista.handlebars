@@ -1,5 +1,18 @@
 <h1>Lista de postagens:</h1>
 <hr>
+{{#each postagens}}
+    <div class="card mb-4">
+        <div class="card-body">
+            <h3>{{titulo}}</h3>
+            <p>Slug: {{slug}}</p>
+            <p>Descrição: {{descricao}}</p>
+            <p>Conteudo: {{conteudo}}</p>
+            <p>Categoria: {{categoria.nome}}</p>
+        </div>
+    </div>
+{{else}}
+    <p>Nenhuma postagem criada!</p>
+{{/each}}
 <a href="/posts/lista/add">
     <button class="btn btn-success">Criar Nova Postagem</button>
 </a>
