@@ -11,6 +11,7 @@ import session from 'express-session';
 import flash from 'connect-flash';
 
 import routerAdm from "./routes/admin.js";
+import routerPosts from "./routes/posts.js";
 
 const app = express()
 
@@ -55,6 +56,7 @@ const app = express()
     })
 
     app.use('/admin', routerAdm)
+    app.use('/posts', routerPosts)
     
 //!
 
