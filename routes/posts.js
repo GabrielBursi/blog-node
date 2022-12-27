@@ -84,6 +84,10 @@ router.post('/nova', (req, res) => {
     }
 })
 
+router.get('/delete/:id', (req, res) => {
+    ModelPostagens.findByIdAndDelete(req.params.id).lean().then(() => res.redirect('/posts/lista'))
+})
+
 export default router
 
 
