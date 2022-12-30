@@ -14,6 +14,7 @@ import routerAdm from "./routes/admin.js";
 import routerPosts from "./routes/posts.js";
 
 import ModelPostagens from './models/Postagens.js';
+import ModelCategoria from './models/Categoria.js';
 
 const app = express()
 
@@ -53,16 +54,36 @@ const app = express()
     }
 
 //!Rotas
+    //!Rotas Home
     app.get('/',(req, res) => {
         ModelPostagens.find().lean().populate("categoria").sort({data: 'desc'})
             .then(postagens => res.render('home', {postagens}))
             .catch(() => res.redirect('/404'))
     })
 
-    app.get('/posts/:slug', (req, res) => {
+    app.get('/postagens/:slug', (req, res) => {
         ModelPostagens.findOne({slug:req.params.slug}).lean().then(postagem => {
             if(postagem) {
-                res.render('posts/index',{postagem})
+                res.render('postagem/index',{postagem})
+            }
+            else{
+                res.redirect('/')
+            }
+        })
+    })
+
+    app.get('/categorias', (req, res) => {
+        ModelCategoria.find().lean().then(categoria => {
+            res.render('categorias/index', {categoria})
+        })
+    })
+
+    app.get('/categorias/:slug', (req, res) => {
+        ModelCategoria.findOne({slug:req.params.slug}).lean().then(categoria => {
+            if(categoria) {
+                ModelPostagens.find({categoria: categoria._id}).lean().then(postagem => {
+                    res.render('categorias/postagens',{postagem, categoria})
+                })
             }
             else{
                 res.redirect('/')
@@ -72,6 +93,7 @@ const app = express()
 
     app.get('404', (req, res) => res.send('404'))
 
+    //!Rotas Das paginas
     app.use('/admin', routerAdm)
     app.use('/posts', routerPosts)
     
