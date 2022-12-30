@@ -13,6 +13,8 @@ import flash from 'connect-flash';
 import routerAdm from "./routes/admin.js";
 import routerPosts from "./routes/posts.js";
 
+import ModelPostagens from './models/Postagens.js';
+
 const app = express()
 
 //! Config
@@ -52,8 +54,23 @@ const app = express()
 
 //!Rotas
     app.get('/',(req, res) => {
-        res.render('home')
+        ModelPostagens.find().lean().populate("categoria").sort({data: 'desc'})
+            .then(postagens => res.render('home', {postagens}))
+            .catch(() => res.redirect('/404'))
     })
+
+    app.get('/posts/:slug', (req, res) => {
+        ModelPostagens.findOne({slug:req.params.slug}).lean().then(postagem => {
+            if(postagem) {
+                res.render('posts/index',{postagem})
+            }
+            else{
+                res.redirect('/')
+            }
+        })
+    })
+
+    app.get('404', (req, res) => res.send('404'))
 
     app.use('/admin', routerAdm)
     app.use('/posts', routerPosts)
