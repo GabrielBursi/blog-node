@@ -12,6 +12,7 @@ import flash from 'connect-flash';
 
 import routerAdm from "./routes/admin.js";
 import routerPosts from "./routes/posts.js";
+import routerUser from './routes/user.js';
 
 import ModelPostagens from './models/Postagens.js';
 import ModelCategoria from './models/Categoria.js';
@@ -96,6 +97,7 @@ const app = express()
     //!Rotas Das paginas
     app.use('/admin', routerAdm)
     app.use('/posts', routerPosts)
+    app.use('/registro', routerUser)
     
 //!
 
