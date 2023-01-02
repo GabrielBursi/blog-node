@@ -21,6 +21,6 @@ const Usuario = new Schema({
     }
 })
 
-const ModelUsuario = mongoose.connect('usuarios', Usuario)
+const ModelUsuario = mongoose.model('usuarios', Usuario)
 
 export default ModelUsuario

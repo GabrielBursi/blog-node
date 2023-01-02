@@ -1,6 +1,7 @@
 import express from 'express';
+import bcrypt from 'bcrypt'
 
-
+import ModelUsuario from '../models/Usuario.js';
 
 const router = express.Router()
 
@@ -23,7 +24,34 @@ router.post('/registro', (req, res) => {
     if(errors.length > 0){
         res.render('users/registro', {errors})
     }else{
+        ModelUsuario.findOne({email: req.body.email}).then(usuario => {
+            if(usuario){
+                req.flash('error_msg', 'Esse email já existe!')
+                res.redirect('/registro')
+            }else{
+                const novoUsuario = new ModelUsuario({
+                    nome: req.body.nome,
+                    email: req.body.email,
+                    senha: req.body.senha
+                })
 
+                bcrypt.genSalt(10, (err, salt) => {
+                    bcrypt.hash(novoUsuario.senha, salt, (err, hash) => {
+                        if(err){
+                            req.flash('error_msg', 'Houve um erro ao salvar o usuario')
+                            res.redirect('/')
+                        }
+
+                        novoUsuario.senha = hash
+
+                        novoUsuario.save().then(() => {
+                            req.flash('success_msg', 'Cadastro realizado com sucesso')
+                            res.redirect('/')
+                        })
+                    });
+                });
+            }
+        })
     }
 })
 
