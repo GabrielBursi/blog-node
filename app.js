@@ -17,6 +17,10 @@ import routerUser from './routes/user.js';
 import ModelPostagens from './models/Postagens.js';
 import ModelCategoria from './models/Categoria.js';
 
+import passport from 'passport';
+import passportFun from './config/auth.js';'./config/auth.js'
+passportFun(passport)
+
 const app = express()
 
 //! Config
@@ -28,6 +32,9 @@ const app = express()
         saveUninitialized: true,
         cookie: { secure: true }
     }))
+
+    app.use(passport.initialize())
+    app.use(passport.session())
 
     app.use(flash());
     //!Middleware
