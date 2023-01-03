@@ -2,24 +2,26 @@ import express from 'express'
 
 import ModelCategoria from '../models/Categoria.js'
 
+import isAdmin from '../helpers/isAdmin.js'
+
 const router = express.Router()
 
-router.get('/',(req, res) => { //* rota index
+router.get('/', isAdmin, (req, res) => { //* rota index
     res.render('admin/index')
 })
 
-router.get('/lista',(req, res) => { //*rota lista
+router.get('/lista', isAdmin, (req, res) => { //*rota lista
     ModelCategoria.find().sort({date:'desc'}).lean().then(items => {
         res.render('admin/lista', {items})
     })
     .catch(() => req.flash('error_msg', 'Houve um erro, tente novamente.'))
 })
 
-router.get('/lista/add',(req, res) => { //* rota para form add lista
+router.get('/lista/add', isAdmin, (req, res) => { //* rota para form add lista
     res.render('admin/add')
 })
 
-router.post('/lista/nova',(req, res) => { //* rota para criar nova categoria
+router.post('/lista/nova', isAdmin, (req, res) => { //* rota para criar nova categoria
 
     const erros = []
 
@@ -46,7 +48,7 @@ router.post('/lista/nova',(req, res) => { //* rota para criar nova categoria
 
 })
 
-router.get('/lista/edit/:id', (req, res) => { //* rota para editar 
+router.get('/lista/edit/:id', isAdmin,  (req, res) => { //* rota para editar 
     ModelCategoria.findById(req.params.id).lean()
         .then(item => res.render('admin/edit',{item}))
         .catch(() => {
@@ -55,7 +57,7 @@ router.get('/lista/edit/:id', (req, res) => { //* rota para editar
         })
 })
 
-router.post('/lista/edit', (req, res) => { //* rota para editar e mudar a categoria
+router.post('/lista/edit', isAdmin,  (req, res) => { //* rota para editar e mudar a categoria
     ModelCategoria.findById(req.body.id).then(item => {
         item.nome = req.body.name
         item.slug = req.body.slug
@@ -74,7 +76,7 @@ router.post('/lista/edit', (req, res) => { //* rota para editar e mudar a catego
     })
 })
 
-router.post('/lista/delete', (req, res) => { //* rota para delete
+router.post('/lista/delete', isAdmin,  (req, res) => { //* rota para delete
     ModelCategoria.findByIdAndDelete(req.body.id).then(() => res.redirect('/admin/lista'))
 })
 

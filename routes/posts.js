@@ -3,27 +3,29 @@ import express from 'express'
 import ModelCategoria from '../models/Categoria.js'
 import ModelPostagens from '../models/Postagens.js'
 
+import isAdmin from '../helpers/isAdmin.js'
+
 const router = express.Router()
 
-router.get('/', (req, res) => {
+router.get('/', isAdmin, (req, res) => {
     res.render('posts/index')
 })
 
-router.get('/lista', (req, res) => {
+router.get('/lista', isAdmin, (req, res) => {
     ModelPostagens.find().lean().populate('categoria').sort({data: 'desc'})
         .then(postagens => {
             res.render('posts/lista', {postagens})
         })
 })
 
-router.get('/lista/add', (req, res) => {
+router.get('/lista/add', isAdmin, (req, res) => {
     ModelCategoria.find().lean()
         .then(items => {
             res.render('posts/add', {items})
         })
 })
 
-router.get('/lista/edit/:id', (req, res) => {
+router.get('/lista/edit/:id', isAdmin, (req, res) => {
 
     ModelPostagens.findById(req.params.id).lean().then(postagem => {
         ModelCategoria.find().lean().then(categorias => {
@@ -38,7 +40,7 @@ router.get('/lista/edit/:id', (req, res) => {
     })
 })
 
-router.post('/edit', (req, res) => {
+router.post('/edit', isAdmin, (req, res) => {
     ModelPostagens.findById(req.body.id).then(postagem => {
 
         postagem.titulo = req.body.titulo
@@ -57,7 +59,7 @@ router.post('/edit', (req, res) => {
     })
 })
 
-router.post('/nova', (req, res) => {
+router.post('/nova', isAdmin, (req, res) => {
     const erros = []
 
     if(req.body.categoria == '0'){
@@ -84,7 +86,7 @@ router.post('/nova', (req, res) => {
     }
 })
 
-router.get('/delete/:id', (req, res) => {
+router.get('/delete/:id', isAdmin, (req, res) => {
     ModelPostagens.findByIdAndDelete(req.params.id).lean().then(() => res.redirect('/posts/lista'))
 })
 
